@@ -1,5 +1,4 @@
 from selenium import webdriver
-import bs4,re
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -17,20 +16,12 @@ delay = 5
 try:
     elms = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.CLASS_NAME, 'organization-card__container')))
     print("Page is ready!")
-    # html=browser.page_source
-    # file1=open("./content.html",'w')
-    # file1.write(html)
-    # file1.close()
+    html=browser.page_source
+    file1 = open("./content.html",'w')
+    file1.write(html)
+    file1.close()
 
-    # file1 = open("./content.html",'r') 
-    # soup = bs4.BeautifulSoup(file1, 'html.parser') 
-    # orgs=soup.find_all('div',class_='organization-card__container') 
-    # file2 = open("orgs.txt",'w')
-    # for org in orgs:
-    #     file2.write(org.get_text().strip() + '\n\n')
-    # file2.close()
-    # file1.close()
-    workbook   = xlsxwriter.Workbook('test1.xlsx')
+    workbook   = xlsxwriter.Workbook('results.xlsx')
     worksheet = workbook.add_worksheet()
     row = 1
     col = 0
@@ -41,7 +32,6 @@ try:
     worksheet.write(0, 1, 'TECHNOLOGIES', bold)
     worksheet.write(0, 2, 'TOPIC CATEGORY', bold)
     worksheet.write(0, 3, 'TOPIC NAMES', bold)
-
 
     orgs = browser.find_elements_by_class_name('organization-card__container')
     for org in orgs:
@@ -62,7 +52,7 @@ try:
         for topic in topics:
             topics_text += topic.text + ','
         worksheet.write(row, col+3, topics_text)
-        row+=1
+        row += 1
     workbook.close()
 
 except TimeoutException:
